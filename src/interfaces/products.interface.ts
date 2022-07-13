@@ -4,3 +4,9 @@ export interface IProduct {
   amount: string;
   orderId: number;
 }
+
+export interface INewProduct {
+  id: number;
+  name: string;
+  amount: string;
+}

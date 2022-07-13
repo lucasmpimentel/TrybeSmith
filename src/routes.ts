@@ -1,9 +1,11 @@
 import express from 'express';
-import { getAll } from './controller/products.controller';
+import newProductValidation from './middlewares/products.validations';
+import { getAll, insertNew } from './controller/products.controller';
 
 const routes = express.Router();
 
 routes.route('/products')
-  .get(getAll);
+  .get(getAll)
+  .post(newProductValidation, insertNew);
 
 export default routes;

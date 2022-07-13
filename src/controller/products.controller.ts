@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getAllProducts } from '../service/products.service';
+import { getAllProducts, insertNewProduct } from '../service/products.service';
 
 export const getAll = async (_req:Request, res:Response) => {
   const result = await getAllProducts();
@@ -8,4 +8,10 @@ export const getAll = async (_req:Request, res:Response) => {
 
 export const getById = async (req:Request, res:Response) => {
   console.log(req, res);
+};
+
+export const insertNew = async (req:Request, res:Response) => {
+  const { name, amount } = req.body;
+  const result = await insertNewProduct(name, amount);
+  res.status(201).json(result);
 };

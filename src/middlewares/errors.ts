@@ -1,12 +1,9 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import CustomError from '../utils/CustomError';
 
-interface ObjectError {
-  code: number,
-  message: string,
-}
-
-const error = (err:ObjectError, _req:Request, res:Response): Response => (
-  res.status(err.code || 500).json({ message: err.message })
-);
+const error = (err: Error, _req:Request, res:Response, _next: NextFunction): Response => {
+  const { status, message } = err as CustomError;
+  return res.status(status || 500).json({ message });
+};
 
 export default error;
