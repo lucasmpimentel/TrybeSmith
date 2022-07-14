@@ -13,7 +13,12 @@ const newUserSchema = Joi
     'number.greater': '{#label} must be greater than or equal to 1',
   });
 
-const newUserValidation = async (req: Request, res:Response, next: NextFunction) => {
+const loginSchema = Joi.object({
+  username: Joi.string().required(),
+  password: Joi.string().required(),
+});
+
+export const newUserValidation = async (req: Request, _res:Response, next: NextFunction) => {
   const { username, classe, level, password } = req.body;
   const { error } = newUserSchema.validate({
     username,
@@ -21,7 +26,7 @@ const newUserValidation = async (req: Request, res:Response, next: NextFunction)
     level,
     password,
   });
-  console.log(error?.details[0].type);
+
   if (error) {
     const code: number = error.details[0].type === 'any.required' ? 400 : 422;
     throw new CustomError(code, error.message);
@@ -30,4 +35,11 @@ const newUserValidation = async (req: Request, res:Response, next: NextFunction)
   next();
 };
 
-export default newUserValidation;
+export const loginValidation = async (req:Request, _res:Response, next: NextFunction) => {
+  const { username, password } = req.body;
+  const { error } = await loginSchema.validate({ username, password });
+
+  if (error) throw new CustomError(400, error.message);
+
+  next();
+};

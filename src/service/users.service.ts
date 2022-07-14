@@ -1,9 +1,9 @@
-import { INewUser } from '../interfaces/users.interface';
+import { IUser } from '../interfaces/users.interface';
 import { getUserByName, createNewUser } from '../models/users.models';
 import { createToken } from '../utils/token.utils';
 import CustomError from '../utils/CustomError';
 
-export const insertNewUserService = async (newUser: INewUser): Promise<string> => {
+export const insertNewUserService = async (newUser: IUser): Promise<string> => {
   const { username, classe, level } = newUser;
   
   const getUser = await getUserByName(username);
@@ -14,4 +14,15 @@ export const insertNewUserService = async (newUser: INewUser): Promise<string> =
   return token;
 };
 
-export const a = 'a';
+export const loginService = async (username: string, password: string) => {
+  const [getUser] = await getUserByName(username);
+  
+  if (!getUser) throw new CustomError(401, 'Username or password invalid');
+  
+  if (getUser.username === username && getUser.password === password) {
+    const token = createToken(getUser.id, getUser.username, getUser.classe, getUser.level);
+    return token;
+  }
+  
+  throw new CustomError(401, 'Username or password invalid');
+};
