@@ -4,7 +4,7 @@ export interface IOrders {
 }
 
 export interface IOrdersAndProducts {
-  id: number;
+  id?: number;
   userId: number;
   productsIds: number[];
 }

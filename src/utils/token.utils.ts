@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
-import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
+import { IUserToken } from '../interfaces/users.interface';
 
 dotenv.config();
 
@@ -17,7 +18,6 @@ export const createToken = (id:number, username:string, classe:string, level:num
   jwt.sign({ data: { id, username, classe, level } }, secret, jwtConfig as SignOptions)
 );
 
-export const verifyToken = (token: string): string | JwtPayload => {
-  const user = jwt.verify(token, secret);
-  return user;
-};
+export const verifyToken = async (token: string) => (
+  await jwt.verify(token, secret) as { data: IUserToken }
+);

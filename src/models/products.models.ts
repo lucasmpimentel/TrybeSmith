@@ -9,10 +9,6 @@ export const getAll = async ():Promise<IProduct[]> => {
   return products as IProduct[];
 };
 
-export const getProductById = async (id:number) => {
-  console.log(id);
-};
-
 export const insertNew = async (name: string, amount: string):Promise<number> => {
   const [newRow] = await connection.execute<ResultSetHeader>(
     'INSERT INTO Trybesmith.Products (name, amount) VALUES (?, ?);',

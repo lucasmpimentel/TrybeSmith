@@ -6,10 +6,6 @@ export const getAll = async (_req:Request, res:Response) => {
   res.status(200).json(result);
 };
 
-export const getById = async (req:Request, res:Response) => {
-  console.log(req, res);
-};
-
 export const insertNew = async (req:Request, res:Response) => {
   const { name, amount } = req.body;
   const result = await insertNewProduct(name, amount);
