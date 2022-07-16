@@ -26,3 +26,11 @@ export const newOrder = async (userId: number) => {
   const { insertId } = order;
   return insertId;
 };
+
+export const insertOrderedProducts = async (productId: number, orderId: number) => {
+  const [order] = await connection.execute<ResultSetHeader>(
+    'UPDATE Trybesmith.Products SET orderId = ? WHERE id = ?',
+    [orderId, productId],
+  );
+  return order;
+};

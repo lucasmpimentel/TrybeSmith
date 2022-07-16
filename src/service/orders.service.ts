@@ -1,7 +1,12 @@
 import { IOrders, IOrdersAndProducts } from '../interfaces/orders.interface';
 import { IProduct } from '../interfaces/products.interface';
-import { getAllOrders, getOrderById, newOrder } from '../models/orders.models';
 import CustomError from '../utils/CustomError';
+import {
+  getAllOrders,
+  getOrderById,
+  newOrder,
+  insertOrderedProducts,
+} from '../models/orders.models';
 
 export const getAllOrdersService = async (): Promise<IOrders[]> => {
   const orders = await getAllOrders();
@@ -23,8 +28,11 @@ export const getAllOrdersProducts = async (): Promise<IOrdersAndProducts[]> => {
 export const newOrderService = async (productsIds: number[], userJSON: string) => {
   const user = JSON.parse(userJSON);
   const { id } = user as { id: number };
-  const result = await newOrder(id);
-  if (result) {
+  const orderId = await newOrder(id);
+  await Promise.all(productsIds.map(async (productId) => {
+    await insertOrderedProducts(productId, orderId);
+  }));
+  if (orderId) {
     return { userId: id, productsIds } as IOrdersAndProducts;
   }
   throw new CustomError(500, 'Internal server error');
